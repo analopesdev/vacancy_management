@@ -13,7 +13,7 @@ public class CandidateEntity {
   private UUID id;
   private String name;
 
-  @Pattern(regexp = "^(?!\\s*$).*", message = "Username should not be empty")
+  @Pattern(regexp = "\\S+", message = "Username should not be empty")
   private String username;
 
   @Email(message = "Email should be valid")
