@@ -13,6 +13,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
+/**
+ * Represents a company entity in the vacancy management system.
+ */
 @Entity(name = "company")
 
 @Data
