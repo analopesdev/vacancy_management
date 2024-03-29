@@ -9,4 +9,5 @@ import br.com.analopesdev.vacancy_management.modules.company.entities.CompanyEnt
 
 public interface CompanyRepository extends JpaRepository<CompanyEntity, UUID>{
   Optional<CompanyEntity> findByUsernameOrName(String userName, String name); 
+  Optional<CompanyEntity> findByUsername(String userName);
 }

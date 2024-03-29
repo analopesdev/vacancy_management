@@ -12,7 +12,7 @@ import br.com.analopesdev.vacancy_management.modules.candidate.useCases.CreateCa
 import jakarta.validation.Valid; 
 
 @RestController
-@RequestMapping("/candidate")
+@RequestMapping("/candidate") 
 public class CandidateController {
 
   @Autowired

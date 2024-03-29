@@ -1,6 +1,7 @@
 package br.com.analopesdev.vacancy_management.modules.candidate.useCases;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.analopesdev.vacancy_management.exceptions.UserFoundException;
@@ -10,6 +11,9 @@ import br.com.analopesdev.vacancy_management.modules.candidate.CandidateReposito
 
 @Service
 public class CreateCandidateUseCase {
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
     
   @Autowired
   private CandidateRepository candidateRepository;
@@ -18,6 +22,10 @@ public class CreateCandidateUseCase {
     this.candidateRepository.findByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail()).ifPresent((user) -> {
       throw new UserFoundException();
     });
+
+    var password = this.passwordEncoder.encode(candidateEntity.getPassword());
+    candidateEntity.setPassword(password);
+
     return this.candidateRepository.save(candidateEntity);
   }
 }
