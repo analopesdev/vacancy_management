@@ -20,6 +20,12 @@ public class SecurityConfig {
   @Autowired
   private SecurityCandidateFilter securityCandidateFilter;
 
+  private static final String[] SWAGGER_LIST = {
+    "/v3/api-docs/**",
+    "/swagger-ui/**",
+    "/swagger-resource/**",
+  };
+
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
@@ -33,6 +39,8 @@ public class SecurityConfig {
           .requestMatchers("/company/auth")
           .permitAll()
           .requestMatchers("/candidate/auth")
+          .permitAll()
+          .requestMatchers(SWAGGER_LIST)
           .permitAll();
         auth.anyRequest().authenticated();
       })
