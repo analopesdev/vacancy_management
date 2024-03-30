@@ -1,12 +1,11 @@
 package br.com.analopesdev.vacancy_management.security;
 
-import br.com.analopesdev.vacancy_management.providers.JWTProvider;
+import br.com.analopesdev.vacancy_management.providers.JWTCandidateProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,10 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class SecurityCandidateFilter extends OncePerRequestFilter {
 
   @Autowired
-  private JWTProvider jwtProvider;
+  private JWTCandidateProvider jwtCandidateProvider;
 
   @Override
   protected void doFilterInternal(
@@ -29,14 +28,16 @@ public class SecurityFilter extends OncePerRequestFilter {
     // SecurityContextHolder.getContext().setAuthentication(null);
     String header = request.getHeader("Authorization");
 
-    if (request.getRequestURI().startsWith("/company")) {
+    if (request.getRequestURI().startsWith("/candidate")) {
       if (header != null) {
-        var token = this.jwtProvider.validateToken(header);
+        var token = this.jwtCandidateProvider.validationToken(header);
 
         if (token == null) {
           response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
           return;
         }
+
+        request.setAttribute("candidate_id", token.getSubject());
 
         var roles = token.getClaim("roles").asList(Object.class);
 
@@ -47,7 +48,6 @@ public class SecurityFilter extends OncePerRequestFilter {
           )
           .toList();
 
-        request.setAttribute("company_id", token.getSubject());
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
           token.getSubject(),
           null,
